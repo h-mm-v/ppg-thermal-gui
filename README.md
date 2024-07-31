@@ -121,7 +121,6 @@ _For an example, please refer to the [Demo](https://example.com)_
 
 - [x] Butterworth bandpass filter
 - [x] Peak Enhancement algorithm
-      - [x] Pulse Separation
 - [x] Fiducial Point Identification
 - [x] Biomarker Calculation
 - [x] Vital Sign Estimation 
