@@ -7,18 +7,17 @@ from PIL import Image
 import imageio
 import imutils
 from imutils import face_utils
+from matplotlib import pyplot as plt
+from matplotlib import animation
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import numpy as np
 import pathlib
 import scipy.signal as sp
 from scipy.fft import fft, fftfreq
-import scipy.interpolate as spi
 import serial
 import tkinter as tk
 import threading
 from tkinter import ttk
-from matplotlib import pyplot as plt
-from matplotlib import animation
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import os
 
 #Class Variables
@@ -26,12 +25,15 @@ SAMPLE_RATE = 60
 
 ############################## - Import data from pulse ox - ####################################################################
 def import_ppg_data_live():
+    '''
+    Recieves PPG data from a serial port and saves it into a subject folder
+    '''
     try:
         num_seconds = int(sample_duration_entry.get())
     except:
         error_message_box()
         return
-    
+    #open serial port
     try:
             ser = serial.Serial(port=serial_port_entry.get(),
                                 baudrate=115200,
@@ -64,7 +66,7 @@ def import_ppg_data_live():
     recording_progress.grid(row=3,column=0)
 
     live_waveform_window = ctk.CTkToplevel(master=monitor_window)
-
+    #create figure
     fig = plt.Figure(figsize=(6, 4), dpi=100)
     fig.tight_layout(pad=2)
     ax = fig.add_subplot(111)
@@ -81,10 +83,16 @@ def import_ppg_data_live():
     live_hr_label.grid(row=1,column=0)
 
     def init_plot():
+        '''
+        Returns a matplotlib line to represent the pulse oximeter waveform
+        '''
         line.set_data([], [])
         return line,
 
     def update_plot(frame):
+        '''
+        Updates line with new data read from serial port
+        '''
         if ser.is_open:
             try:
                 data = ser.read(9)
@@ -128,6 +136,9 @@ def import_ppg_data_live():
     
 
     def finalize_recording():
+        '''
+        Destroys display window and creates final estimations
+        '''
         ser.close()
         progress_label.destroy()
         recording_progress.destroy()
@@ -146,16 +157,25 @@ def import_ppg_data_live():
         
 
     def start_recording():
+        '''
+        Starts and finishes the recording process
+        '''
         ani._start()
         monitor_window.after(num_seconds * 1000, finalize_recording)  # Convert seconds to milliseconds
 
     def run_recording():
+        '''
+        Starts a thread to run the recording process in
+        '''
         threading.Thread(target=start_recording).start()
 
     run_recording()
     #ani.save("ppg_recording.mp4", writer="ffmpeg", fps=60)
 
 def get_subject_path():
+    '''
+    Takes subject parameters from the GUI and creates a folder and path to save data in
+    '''
     subject_name = subject_name_entry.get().lower()
     
     subject_folder_path = str(pathlib.Path().resolve()) + "/" + subject_name
@@ -176,6 +196,9 @@ def get_subject_path():
 ############################################################### - Thermal Camera - ##########################################################
 
 def record_thermal_camera():
+    '''
+    Records thermal data to the subject folder in a .avi and .npy frames file
+    '''
     camera_sample_rate = float(thermal_sample_rate_entry.get())
 
     frame_total = int(sample_duration_entry.get()) * camera_sample_rate
@@ -223,6 +246,9 @@ def record_thermal_camera():
     return
 
 def analyze_thermal():
+    '''
+    Estimates respiratory rate from nose region of the thermal video
+    '''
     subject_name = subject_name_entry.get()
     sample_number = sample_number_entry.get()
 
@@ -582,11 +608,17 @@ def analyze_thermal():
 ########################################################### - GUI - ######################################################################
 
 def error_message_box():
+    '''
+    Generates a general error pop-up
+    '''
     CTkMessagebox(master=monitor_window,
                   title="Error",
                   message="Invalid Input.")
     
 def begin_analysis():
+    '''
+    Runs analysis scripts depending on GUI parameters
+    '''
     if thermal_check.get():
         thermal_analysis_thread = threading.Thread(analyze_thermal)
         thermal_analysis_thread.start()
@@ -606,6 +638,9 @@ def begin_analysis():
         monitor_window.deiconify()
 
 def begin_recording():
+    '''
+    Runs recording scripts based on GUI parameters
+    '''
     global subject_name
     global subject_folder_path
     global sample_index
