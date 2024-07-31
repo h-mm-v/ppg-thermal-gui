@@ -65,9 +65,9 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-  Vital signs, notably respiration rate, heart rate, and heart rate variability, are important measures for assessing health status. Photoplethysmography (PPG) is a low-cost and noninvasive technique that can be processed to obtain such vital measurements. For PPG signals, we developed a peak detection algorithm that is robust to corruption. These extrema points are essential to obtain numerical estimates for the pulse - namely the heart rate and heart rate variability. Building on this, we processed these extrema to infer the respiratory rate from the PPG signal. Specifically, we explore and analyze the frequency profile of HRV, peak amplitude, and signal intensity to estimate the respiratory signal [1]. 
-  Parallely, we explore thermal imaging to develop a non-contact-based method to monitor RR. This is a crucial step forwards as contact-based methods can cause discomfort to patients and alter breathing rates. Current non-contact methods have room for improvement given their sensitivity to extraneous movements. We estimate RR from thermal videos by monitoring temperature changes in the region around the nose caused by inhaling cold air and exhaling warm air. This area is extracted using machine learning methods to detect 54 facial landmarks [2], and hence the region of interest (ROI). Respiration being quasi-periodic, can be identified through a frequency-based analysis of the ROI. Specifically, we look at ways to subdivide the ROI and quantify its quality through measures of periodicity and signal strength. 
-  Combining both modules, we develop an end-to-end system to acquire and analyze thermal and PPG signals in order to estimate the participant’s breathing rate. We placed the camera to be facing the participant at angle from underneath the face to better capture the temperature variations near the nose. We tested several recordings with the subject in different positions and breathing at different rates. The estimate from the thermal camera, the rate calculated from our PPG-based algorithm, and the estimation from directly counting breaths in the recorded video were all consistent with each other.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vital signs, notably respiration rate, heart rate, and heart rate variability, are important measures for assessing health status. Photoplethysmography (PPG) is a low-cost and noninvasive technique that can be processed to obtain such vital measurements. For PPG signals, we developed a peak detection algorithm that is robust to corruption. These extrema points are essential to obtain numerical estimates for the pulse - namely the heart rate and heart rate variability. Building on this, we processed these extrema to infer the respiratory rate from the PPG signal. Specifically, we explore and analyze the frequency profile of HRV, peak amplitude, and signal intensity to estimate the respiratory signal [1]. 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Parallely, we explore thermal imaging to develop a non-contact-based method to monitor RR. This is a crucial step forwards as contact-based methods can cause discomfort to patients and alter breathing rates. Current non-contact methods have room for improvement given their sensitivity to extraneous movements. We estimate RR from thermal videos by monitoring temperature changes in the region around the nose caused by inhaling cold air and exhaling warm air. This area is extracted using machine learning methods to detect 54 facial landmarks [2], and hence the region of interest (ROI). Respiration being quasi-periodic, can be identified through a frequency-based analysis of the ROI. Specifically, we look at ways to subdivide the ROI and quantify its quality through measures of periodicity and signal strength. 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Combining both modules, we develop an end-to-end system to acquire and analyze thermal and PPG signals in order to estimate the participant’s breathing rate. We placed the camera to be facing the participant at angle from underneath the face to better capture the temperature variations near the nose. We tested several recordings with the subject in different positions and breathing at different rates. The estimate from the thermal camera, the rate calculated from our PPG-based algorithm, and the estimation from directly counting breaths in the recorded video were all consistent with each other.
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -77,15 +77,14 @@
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
 To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
 This is an example of how to list things you need to use the software and how to install them.
-* npm
+* scipy
   ```sh
-  npm install npm@latest -g
+  py pip install scipy
   ```
 
 ### Installation
@@ -110,9 +109,8 @@ This is an example of how to list things you need to use the software and how to
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+_For an example, please refer to the [Demo](https://example.com)_
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -121,10 +119,13 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
+- [x] Butterworth bandpass filter
+- [x] Peak Enhancement algorithm
+      - [x] Pulse Separation
+- [x] Fiducial Point Identification
+- [x] Biomarker Calculation
+- [x] Vital Sign Estimation 
+
 
 See the [open issues](https://github.com/hmmv/ppg-thermal-gui/issues) for a full list of proposed features (and known issues).
 
