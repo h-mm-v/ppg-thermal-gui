@@ -28,7 +28,7 @@
 <h3 align="center">Graphical User Interface for Extracting Vitals from CMS50d+ Pulse Oximeters and Thermal Cameras</h3>
 
   <p align="center">
-    A multimodal graphical user interface to record synchronous data from a pulse oximeter and thermal camera. The rec
+    A multimodal graphical user interface to record synchronous data from a pulse oximeter and thermal camera.
     <br />
     <a href="https://github.com/hmmv/ppg-thermal-gui"><strong>Explore the docs »</strong></a>
     <br />
@@ -49,9 +49,6 @@
   <ol>
     <li>
       <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
     </li>
     <li>
       <a href="#getting-started">Getting Started</a>
@@ -63,7 +60,6 @@
     <li><a href="#usage">Usage</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
@@ -74,22 +70,10 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+  Vital signs, notably respiration rate, heart rate, and heart rate variability, are important measures for assessing health status. Photoplethysmography (PPG) is a low-cost and noninvasive technique that can be processed to obtain such vital measurements. For PPG signals, we developed a peak detection algorithm that is robust to corruption. These extrema points are essential to obtain numerical estimates for the pulse - namely the heart rate and heart rate variability. Building on this, we processed these extrema to infer the respiratory rate from the PPG signal. Specifically, we explore and analyze the frequency profile of HRV, peak amplitude, and signal intensity to estimate the respiratory signal [1]. 
+  Parallely, we explore thermal imaging to develop a non-contact-based method to monitor RR. This is a crucial step forwards as contact-based methods can cause discomfort to patients and alter breathing rates. Current non-contact methods have room for improvement given their sensitivity to extraneous movements. We estimate RR from thermal videos by monitoring temperature changes in the region around the nose caused by inhaling cold air and exhaling warm air. This area is extracted using machine learning methods to detect 54 facial landmarks [2], and hence the region of interest (ROI). Respiration being quasi-periodic, can be identified through a frequency-based analysis of the ROI. Specifically, we look at ways to subdivide the ROI and quantify its quality through measures of periodicity and signal strength. 
+  Combining both modules, we develop an end-to-end system to acquire and analyze thermal and PPG signals in order to estimate the participant’s breathing rate. We placed the camera to be facing the participant at angle from underneath the face to better capture the temperature variations near the nose. We tested several recordings with the subject in different positions and breathing at different rates. The estimate from the thermal camera, the rate calculated from our PPG-based algorithm, and the estimation from directly counting breaths in the recorded video were all consistent with each other.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-### Built With
-
-* [![Next][Next.js]][Next-url]
-* [![React][React.js]][React-url]
-* [![Vue][Vue.js]][Vue-url]
-* [![Angular][Angular.io]][Angular-url]
-* [![Svelte][Svelte.dev]][Svelte-url]
-* [![Laravel][Laravel.com]][Laravel-url]
-* [![Bootstrap][Bootstrap.com]][Bootstrap-url]
-* [![JQuery][JQuery.com]][JQuery-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -111,16 +95,15 @@ This is an example of how to list things you need to use the software and how to
 
 ### Installation
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. Clone the repo
    ```sh
    git clone https://github.com/hmmv/ppg-thermal-gui.git
    ```
-3. Install NPM packages
+2. Install NPM packages
    ```sh
    npm install
    ```
-4. Enter your API in `config.js`
+3. Enter your API in `config.js`
    ```js
    const API_KEY = 'ENTER YOUR API';
    ```
@@ -167,15 +150,6 @@ Don't forget to give the project a star! Thanks again!
 3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- LICENSE -->
-## License
-
-Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
