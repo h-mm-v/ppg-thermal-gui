@@ -25,9 +25,6 @@
   <p align="center">
     A multimodal graphical user interface to record synchronous data from a pulse oximeter and thermal camera.
     <br />
-    <a href="https://github.com/hmmv/ppg-thermal-gui"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
     <a href="https://github.com/hmmv/ppg-thermal-gui">View Demo</a>
   </p>
 </div>
