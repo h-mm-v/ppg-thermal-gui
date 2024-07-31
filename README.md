@@ -18,7 +18,6 @@
 *** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
-[![Contributors][contributors-shield]][contributors-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
 <h3 align="center">Graphical User Interface for Extracting Vitals from CMS50d+ Pulse Oximeters and Thermal Cameras</h3>
