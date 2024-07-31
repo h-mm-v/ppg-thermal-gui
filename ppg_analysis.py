@@ -12,6 +12,13 @@ SAMPLE_RATE = 60
 ######################################################### - Analysis - ###########################################################
 
 def analyze(signal, window_size, monitor_window):
+    '''
+    takes in a complete PPG signal in a numpy file
+    takes in an integer to represent the size of each window in seconds
+    takes in a customtkinter/tkinter window to connect the new window to
+    returns the filtered ppg graph and its derivatives
+    returns the hr and rr estimation for the entire signal
+    '''
     #Create arrays to store data from each window
     global ppg_analysis_window
     
@@ -57,15 +64,15 @@ def analyze(signal, window_size, monitor_window):
                                             master = ppg_analysis_window)
         hr_power_spectrum.draw()
 
-        top_envelope, top_envelope_peaks = create_envelopes(sys_peaks_indexes, raw_y)
-        avg_hr2, resp_rate, weight = get_heartrate_biomarkers(sys_peaks_indexes, top_envelope, top_envelope_peaks, pulse_onsets, y)
+        top_envelope = create_envelopes(sys_peaks_indexes, raw_y)
+        avg_hr2, resp_rate, weight = get_heartrate_biomarkers(sys_peaks_indexes, top_envelope, pulse_onsets, y)
         
         fig, (ax1, ax2, ax3, ax4) = plt.subplots(4, 1, sharex = True, sharey = False, figsize=(6,4))
         fig.tight_layout(pad=2)
         ax1.plot(time_vector, raw_y, color = "red", markevery = sys_peaks_indexes, marker = 'x', markeredgecolor = 'k', markerfacecolor = 'k')
         ax1.set(title = "Raw ppg")
         ax2.plot(time_vector, y, color = "red", markevery = sys_peaks_indexes, marker = 'x', markeredgecolor = 'k', markerfacecolor = 'k')
-        ax1.plot(time_vector[:sys_peaks_indexes[-1]], top_envelope, color = "orange", markevery = top_envelope_peaks, marker = 'o')
+        ax1.plot(time_vector[:sys_peaks_indexes[-1]], top_envelope, color = "orange")
         ax2.plot(time_vector, y, color = "None", markevery = dia_peaks_indexes, marker = 'x', markeredgecolor = 'b', markerfacecolor = 'b')
         ax2.plot(time_vector, y, color = "None", markevery = pulse_onsets, marker = 'x', markeredgecolor = 'g', markerfacecolor = 'g')
         ax2.plot()
@@ -138,11 +145,15 @@ def analyze(signal, window_size, monitor_window):
     hr_power_spectrum.get_tk_widget().destroy()
     ppg_analysis_window.destroy()
 
-    return fig, (avg_hr1 + avg_hr2) / 2, resp_rate
+    return fig, hr_estimation, rr_estimation
 
 ########################################################################## - Peak Detection - #######################################################################################################
 
 def experimental_peak_detection(y, dy):
+    '''
+    takes in a signal window and its derivative
+    returns systolic peaks, diastolic peaks, pulse onsets, and dicrotic notches
+    '''
     peak_enhanced_y = peak_enhance(y,  0, 1024, steps = 2)
     plt.show()
     max_index = np.where(np.gradient(np.sign(dy)) < 0)[0]
@@ -197,7 +208,11 @@ def experimental_peak_detection(y, dy):
 
 ############################################## - Gets heartrate and heartrate variability - #####################################
 
-def get_heartrate_biomarkers(sys_peaks, top_envelope, top_envelope_peaks, pulse_onsets, y):
+def get_heartrate_biomarkers(sys_peaks, top_envelope, pulse_onsets, y):
+    '''
+    takes in systolic peaks, pulse onsets, envelope, and signal
+    returns average hr, rr estimate array, and rr estimate weight array
+    '''
     shifted_peaks = np.roll(sys_peaks, 1)
     shifted_peaks[0] = 0
     samples_between_peaks = sys_peaks - shifted_peaks
@@ -207,10 +222,15 @@ def get_heartrate_biomarkers(sys_peaks, top_envelope, top_envelope_peaks, pulse_
     hrv = samples_between_peaks - shifted_peaks
     hrv = hrv[2:] / 60
     
-    resp_rate, weight = get_resp_rate(top_envelope, top_envelope_peaks, sys_peaks, pulse_onsets, hrv, y)
+    resp_rate, weight = get_resp_rate(top_envelope, sys_peaks, pulse_onsets, hrv, y)
     return avg_hr, resp_rate, weight
 
-def get_resp_rate(top_envelope, top_envelope_peaks, sys_peaks, pulse_onsets, hrv, y):
+def get_resp_rate(top_envelope, sys_peaks, pulse_onsets, hrv, y):
+    '''
+    takes in envelope, systolic peaks, pulse onsets, heart rate variability, and signal
+    returns 3 estimates for rr based on fft analysis of hrv, pulse amplitude, and signal intensity
+    returns weights for each rr estimate based on goodness metric
+    '''
     resampled_hrv = sp.resample(hrv, len(y))
 
     peak_to_peak = y[sys_peaks[:len(pulse_onsets)]] - y[pulse_onsets]
@@ -224,7 +244,7 @@ def get_resp_rate(top_envelope, top_envelope_peaks, sys_peaks, pulse_onsets, hrv
     #ax2.plot(peakToPeak)
     ax2.plot(resampled_peak_to_peak)
     ax2.set(title = 'Systolic Peak Amplitudes')
-    ax3.plot(top_envelope, markevery = top_envelope_peaks, marker = 'x')
+    ax3.plot(top_envelope, marker = 'x')
     ax3.set(title = 'Top Envelope')
 
     global bio_markers
@@ -272,6 +292,10 @@ def get_resp_rate(top_envelope, top_envelope_peaks, sys_peaks, pulse_onsets, hrv
 ############################### - Uses butterworth bandpass to smooth out signal and calculate derivs - ################################
 
 def pre_processing(y, l_crit_freq, h_crit_freq):
+    '''
+    takes in signal and critical frequencies for bandpass filter
+    passes butterworth bandpass filter forwards and backwards through inputted signal
+    '''
     raw_y = y
     b, a = sp.butter(4, [l_crit_freq, h_crit_freq], 'bandpass', fs = 60)
     filtered_y = sp.filtfilt(b, a, y, padtype=None)
@@ -280,6 +304,11 @@ def pre_processing(y, l_crit_freq, h_crit_freq):
     return raw_y, filtered_y, dy, ddy
 
 def peak_enhance(y, l_bound, u_bound, steps):
+    '''
+    takes in signal and parameters for algorithm
+    takes in number of times for algorithm to run
+    returns peak-enhanced signal
+    '''
     for i in range(steps):
         y = np.power(y, 2)
         range_of_bound = u_bound - l_bound
@@ -290,6 +319,10 @@ def peak_enhance(y, l_bound, u_bound, steps):
 ##################################### - Creates Freq Spectrum - #########################################################
 
 def freq_spectrum(y, low_freq_bound, high_freq_bound):
+    '''
+    takes in signal and window bounds
+    returns fft and calculates dominant frequency and goodness metric
+    '''
     #Generate fourier transform and bounds
     y = y - np.mean(y)
     yft = np.abs(fft(y, 5000))
@@ -316,6 +349,10 @@ def freq_spectrum(y, low_freq_bound, high_freq_bound):
 ##################################################### - Envelope - ###########################################################
 
 def create_envelopes(sys_peaks, y):
+    '''
+    takes in systolic peaks and signal
+    returns envelope using cubic spline interpolation
+    '''
     for i in range(len(sys_peaks)):
         try:
             sys_peaks[i] = np.argmax(y[sys_peaks[i] - 5:sys_peaks[i] + 5]) + sys_peaks[i] - 5
@@ -332,6 +369,4 @@ def create_envelopes(sys_peaks, y):
         top_envelope[k] = cubic_top_envelope(k)
 
     top_envelope = top_envelope[:sys_peaks[-1]]
-
-    top_envelope_peaks = sp.find_peaks(top_envelope)[0]
-    return top_envelope, top_envelope_peaks
+    return top_envelope
