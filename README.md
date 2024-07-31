@@ -79,6 +79,22 @@ This is an example of how to list things you need to use the software and how to
   ```sh
   py pip install scipy
   ```
+* customtkinter
+  ```sh
+  py pip install customtkinter
+  ```
+* CTkMessagebox
+  ```sh
+  py pip install CTkMessagebox
+  ```
+* numpy
+  ```sh
+  py pip install numpy
+  ```
+* tkinter
+  ```sh
+  py pip install tkinter
+  ```
 
 ### Installation
 
