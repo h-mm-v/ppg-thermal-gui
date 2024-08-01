@@ -100,8 +100,6 @@ This is an example of how to list things you need to use the software and how to
   py pip install matplotlib
   ```
 
-* 
-
 ### Installation
 
 1. Download ppg_analysis.py and ppg_thermal_GUI.py
