@@ -18,7 +18,6 @@
 *** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
-[![LinkedIn][linkedin-shield]][linkedin-url]
 
 <h3 align="center">Graphical User Interface for Extracting Vitals from CMS50d+ Pulse Oximeters and Thermal Cameras</h3>
 
@@ -96,20 +95,20 @@ This is an example of how to list things you need to use the software and how to
   py pip install tkinter
   ```
 
+* matplotlib
+  ```sh
+  py pip install matplotlib
+  ```
+
+* 
+
 ### Installation
 
-1. Clone the repo
+1. Download ppg_analysis.py and ppg_thermal_GUI.py
    ```sh
-   git clone https://github.com/hmmv/ppg-thermal-gui.git
+   https://github.com/hmmv/ppg-thermal-gui.git
    ```
-2. Install NPM packages
-   ```sh
-   npm install
-   ```
-3. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
+2. Run ppg_thermal_GUI.py
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
