@@ -183,11 +183,11 @@ def get_subject_path():
         os.makedirs(subject_folder_path)
     try:
         if ppg_check.get() and thermal_check.get():
-            sample_index = len(os.listdir(subject_folder_path)) / 3
+            sample_index = int(len(os.listdir(subject_folder_path)) / 3)
         elif (thermal_check.get()):
-            sample_index = len(os.listdir(subject_folder_path)) / 2
+            sample_index = int(len(os.listdir(subject_folder_path)) / 2)
         elif (ppg_check.get()):
-            sample_index = len(os.listdir(subject_folder_path))
+            sample_index = int(len(os.listdir(subject_folder_path)))
     except:
         sample_index = 0
     
