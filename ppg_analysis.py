@@ -244,7 +244,7 @@ def get_resp_rate(top_envelope, sys_peaks, pulse_onsets, hrv, y):
     #ax2.plot(peakToPeak)
     ax2.plot(resampled_peak_to_peak)
     ax2.set(title = 'Systolic Peak Amplitudes')
-    ax3.plot(top_envelope, marker = 'x')
+    ax3.plot(top_envelope)
     ax3.set(title = 'Top Envelope')
 
     global bio_markers
@@ -252,9 +252,9 @@ def get_resp_rate(top_envelope, sys_peaks, pulse_onsets, hrv, y):
                                    master = ppg_analysis_window)
     bio_markers.draw()
     
-    resp_rate1, resp_rate1_confidence, power_spectrum1, time_freq_vector1 = freq_spectrum(resampled_hrv, 0.067, 0.75)
-    resp_rate2, resp_rate2_confidence, power_spectrum2, time_freq_vector2 = freq_spectrum(resampled_peak_to_peak, 0.2, 0.75)
-    resp_rate3, resp_rate3_confidence, power_spectrum3, time_freq_vector3 = freq_spectrum(top_envelope, 0.2, 0.75)
+    resp_rate1, resp_rate1_confidence, power_spectrum1, time_freq_vector1 = freq_spectrum(resampled_hrv, 0.067, 0.6)
+    resp_rate2, resp_rate2_confidence, power_spectrum2, time_freq_vector2 = freq_spectrum(resampled_peak_to_peak, 0.2, 0.6)
+    resp_rate3, resp_rate3_confidence, power_spectrum3, time_freq_vector3 = freq_spectrum(top_envelope, 0.2, 0.6)
 
     fig, (ax1, ax2, ax3) = plt.subplots(3, 1, sharex = True, sharey = False, figsize=(6,4))
     fig.tight_layout(pad=2)
@@ -325,8 +325,8 @@ def freq_spectrum(y, low_freq_bound, high_freq_bound):
     '''
     #Generate fourier transform and bounds
     y = y - np.mean(y)
-    yft = np.abs(fft(y, 5000))
-    time_freq_vector = fftfreq(5000, 1/SAMPLE_RATE)
+    yft = np.abs(fft(y, 6000))
+    time_freq_vector = fftfreq(6000, 1/SAMPLE_RATE)
     low_freq_bound = np.argwhere(time_freq_vector >= low_freq_bound)[0][0]
     high_freq_bound = np.argwhere(time_freq_vector >= high_freq_bound)[0][0]
     freq_bound_range = high_freq_bound - low_freq_bound
